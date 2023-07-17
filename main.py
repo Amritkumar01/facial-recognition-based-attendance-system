@@ -4,51 +4,42 @@ import numpy as np
 import csv
 import os
 from datetime import datetime
- 
+
 video_capture = cv2.VideoCapture(0)
- 
-jobs_image = face_recognition.load_image_file("photos/jobs.jpg")
-jobs_encoding = face_recognition.face_encodings(jobs_image)[0]
- 
-ratan_tata_image = face_recognition.load_image_file("photos/tata.jpg")
-ratan_tata_encoding = face_recognition.face_encodings(ratan_tata_image)[0]
- 
-sadmona_image = face_recognition.load_image_file("photos/sadmona.jpg")
-sadmona_encoding = face_recognition.face_encodings(sadmona_image)[0]
- 
-tesla_image = face_recognition.load_image_file("photos/tesla.jpg")
-tesla_encoding = face_recognition.face_encodings(tesla_image)[0]
- 
+
+amrit_image = face_recognition.load_image_file("photos11/amrit.jpeg")
+amrit_encoding = face_recognition.face_encodings(amrit_image)[0]
+
+
+amrit2_image = face_recognition.load_image_file("photos11/amrit2.jpg")
+amrit2_encoding = face_recognition.face_encodings(amrit2_image)[0]
+
 known_face_encoding = [
-jobs_encoding,
-ratan_tata_encoding,
-sadmona_encoding,
-tesla_encoding
+amrit_encoding,
+amrit2_encoding
 ]
- 
+
 known_faces_names = [
-"jobs",
-"ratan tata",
-"sadmona",
-"tesla"
+"amrit",
+"amrit2"
 ]
- 
+
 students = known_faces_names.copy()
- 
+
 face_locations = []
 face_encodings = []
 face_names = []
 s=True
- 
- 
+
+
 now = datetime.now()
 current_date = now.strftime("%Y-%m-%d")
- 
- 
- 
+
+
+
 f = open(current_date+'.csv','w+',newline = '')
 lnwriter = csv.writer(f)
- 
+
 while True:
     _,frame = video_capture.read()
     small_frame = cv2.resize(frame,(0,0),fx=0.25,fy=0.25)
@@ -64,7 +55,7 @@ while True:
             best_match_index = np.argmin(face_distance)
             if matches[best_match_index]:
                 name = known_faces_names[best_match_index]
- 
+
             face_names.append(name)
             if name in known_faces_names:
                 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -73,15 +64,15 @@ while True:
                 fontColor              = (255,0,0)
                 thickness              = 3
                 lineType               = 2
- 
-                cv2.putText(frame,name+' Present', 
-                    bottomLeftCornerOfText, 
-                    font, 
+
+                cv2.putText(frame,name+' Present',
+                    bottomLeftCornerOfText,
+                    font,
                     fontScale,
                     fontColor,
                     thickness,
                     lineType)
- 
+
                 if name in students:
                     students.remove(name)
                     print(students)
@@ -90,7 +81,7 @@ while True:
     cv2.imshow("attendence system",frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
- 
+
 video_capture.release()
 cv2.destroyAllWindows()
 f.close()
